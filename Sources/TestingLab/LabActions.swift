@@ -12,10 +12,10 @@ public struct OpenTestingLabAction: Sendable {
 
 /// Closes the lab, then runs an action once it's gone, so whatever the action shows isn't hidden behind the lab.
 /// Read it inside an app's lab sections: `@Environment(\.closeTestingLab)`.
-public struct CloseTestingLabAction: Sendable {
-    let close: @MainActor @Sendable (_ then: @escaping @MainActor @Sendable () -> Void) -> Void
+public struct CloseTestingLabAction {
+    let close: @MainActor (_ then: @escaping @MainActor () -> Void) -> Void
 
-    public func callAsFunction(then action: @escaping @MainActor @Sendable () -> Void = {}) {
+    public func callAsFunction(then action: @escaping @MainActor () -> Void = {}) {
         close(action)
     }
 }

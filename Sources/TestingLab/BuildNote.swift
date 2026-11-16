@@ -2,14 +2,14 @@
 import SwiftUI
 
 /// One change in this build: what to look at, how to try it, and an optional way there.
-public struct BuildNote: Identifiable {
+nonisolated public struct BuildNote: Identifiable {
     public let commit: String
     public let title: LocalizedStringResource
     public let howToTest: LocalizedStringResource
     public let systemImage: String
     public let color: Color
     /// Runs after the lab closes, such as opening the screen the change is on. Nil when there's nowhere to go.
-    public let action: (@MainActor @Sendable () -> Void)?
+    public let action: (@MainActor () -> Void)?
 
     public var id: String { commit }
 
@@ -19,7 +19,7 @@ public struct BuildNote: Identifiable {
         howToTest: LocalizedStringResource,
         systemImage: String,
         color: Color,
-        action: (@MainActor @Sendable () -> Void)? = nil
+        action: (@MainActor () -> Void)? = nil
     ) {
         self.commit = commit
         self.title = title
