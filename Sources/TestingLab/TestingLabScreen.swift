@@ -47,13 +47,6 @@ struct TestingLabScreen<Sections: View>: View {
                 Text(verbatim: "All data, settings, and caches are deleted and the app quits.")
             }
         }
-        .environment(\.closeTestingLab, CloseTestingLabAction { [dismiss] action in
-            dismiss()
-            Task {
-                try? await Task.sleep(for: .milliseconds(450))
-                action()
-            }
-        })
     }
 }
 

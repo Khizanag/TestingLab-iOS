@@ -23,6 +23,9 @@ public extension View {
 
 private struct TestingLabModifier<Sections: View>: ViewModifier {
     @State private var isPresented = false
+    /// Runs once the sheet has finished closing: anything pushed or presented while it's still animating away can
+    /// come out blank.
+    @State private var afterClose: (@MainActor () -> Void)?
 
     let notes: [BuildNote]
     let accent: Color
@@ -35,9 +38,19 @@ private struct TestingLabModifier<Sections: View>: ViewModifier {
             .onReceive(NotificationCenter.default.publisher(for: .openTestingLab)) { _ in
                 isPresented = true
             }
-            .sheet(isPresented: $isPresented) {
+            .sheet(isPresented: $isPresented, onDismiss: runAfterClose) {
                 TestingLabScreen(notes: notes, accent: accent, erase: erase, sections: sections)
+                    .environment(\.closeTestingLab, CloseTestingLabAction { action in
+                        afterClose = action
+                        isPresented = false
+                    })
             }
+    }
+
+    private func runAfterClose() {
+        let action = afterClose
+        afterClose = nil
+        action?()
     }
 }
 #endif
