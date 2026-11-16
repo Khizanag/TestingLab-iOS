@@ -55,8 +55,9 @@ public struct LabIcon: View {
     public var body: some View {
         Image(systemName: systemImage)
             .font(.footnote.weight(.semibold))
-            .foregroundStyle(.primary)
-            // The dark scheme's primary, so the symbol stays light on any square's color.
+            // A color, not the hierarchical `.primary`, which a button would turn into its tint; read in the dark
+            // scheme, so the symbol stays light on any square's color.
+            .foregroundStyle(Color.primary)
             .environment(\.colorScheme, .dark)
             .frame(width: side, height: side)
             .background(color, in: .rect(cornerRadius: 8, style: .continuous))

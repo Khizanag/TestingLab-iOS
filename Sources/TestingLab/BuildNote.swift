@@ -59,21 +59,22 @@ struct BuildNotesSection: View {
             LabIcon(systemImage: note.systemImage, color: note.color)
                 .alignmentGuide(.firstTextBaseline) { $0[VerticalAlignment.center] + 5 }
             VStack(alignment: .leading, spacing: 4) {
+                // Colors, not hierarchical styles, which a button would turn into its tint.
                 Text(note.title)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(Color.primary)
                 Text(note.howToTest)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.secondary)
                 Text(verbatim: note.commit)
                     .font(.caption.monospaced())
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Color.secondary.opacity(0.6))
                     .accessibilityHidden(true)
             }
             Spacer(minLength: 0)
             if note.action != nil {
                 Image(systemName: "arrow.up.forward")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Color.secondary.opacity(0.6))
                     .accessibilityHidden(true)
             }
         }
