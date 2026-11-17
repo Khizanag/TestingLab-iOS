@@ -38,6 +38,21 @@ struct TestingLabTests {
         #expect(!LaunchOpening.claim())
     }
 
+    @Test("All Screens lists destinations alphabetically, whatever order they're declared in")
+    func allScreensSortsDestinations() {
+        let titles = ["Settings", "about", "Level 10", "Alerts", "Level 2", "Watchlist"]
+        let destinations = titles.map { LabDestination(title: $0, systemImage: "star") {} }
+        let sorted = AllScreens.sorted(destinations).map(\.title)
+        #expect(sorted == ["about", "Alerts", "Level 2", "Level 10", "Settings", "Watchlist"])
+    }
+
+    @Test("A destination is identified by its title")
+    func destinationIdentity() {
+        let destination = LabDestination(title: "Alerts", systemImage: "bell") {}
+        #expect(destination.id == "Alerts")
+        #expect(destination.color == .gray)
+    }
+
     @Test("Outside the lab, closing runs the action at once")
     func closeOutsideLabRunsAction() {
         let flag = Flag()

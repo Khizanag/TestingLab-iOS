@@ -35,6 +35,7 @@ ContentView()
 |---|---|
 | `testingLab(notes:accent:erase:isEnabled:sections:)` | Opens the lab on a shake, from `openTestingLab`, or at launch with `-openTestingLab YES` |
 | `BuildNote` | One change in this build: title, how to test it, and an optional action that goes where it is |
+| `AllScreens`, `LabDestination` | A disclosure row listing every screen the app names, always alphabetical; a tap closes the lab, then opens it |
 | `LabRow`, `LabIcon` | Settings-style rows: a colored icon square; destructive rows are red in both icon and title |
 | `@Environment(\.openTestingLab)` | Opens the lab from anywhere, such as a settings row |
 | `@Environment(\.closeTestingLab)` | Inside the app's sections: closes the lab, then runs an action so what it shows is visible |
