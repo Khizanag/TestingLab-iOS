@@ -33,13 +33,13 @@ ContentView()
 
 | Piece | What it does |
 |---|---|
-| `testingLab(notes:accent:erase:sections:)` | Opens the lab on a shake, from `openTestingLab`, or at launch with `-openTestingLab YES` |
+| `testingLab(notes:accent:erase:isEnabled:sections:)` | Opens the lab on a shake, from `openTestingLab`, or at launch with `-openTestingLab YES` |
 | `BuildNote` | One change in this build: title, how to test it, and an optional action that goes where it is |
 | `LabRow`, `LabIcon` | Settings-style rows: a colored icon square; destructive rows are red in both icon and title |
 | `@Environment(\.openTestingLab)` | Opens the lab from anywhere, such as a settings row |
 | `@Environment(\.closeTestingLab)` | Inside the app's sections: closes the lab, then runs an action so what it shows is visible |
 
-An app with full-screen covers or sheets can attach the lab to each one's root as well as the app's root: a sheet can't open over a cover from below it, so the topmost host is the one that shows. The launch argument opens it once, however many hosts there are.
+An app with full-screen flows can host the lab on each flow's root as well as its own root, so it opens above them. Only one sheet can open at a time and one from below a cover never shows, so pass `isEnabled: false` to the root's host while a flow covers it. The launch argument opens the lab once, however many hosts there are.
 
 The lab always adds a **Build** section (version, bundle ID) and **Erase Everything and Quit**, which deletes the app's settings, Application Support, Caches, Documents, and temporary files, then quits. Pass `erase:` for anything else, such as a store in an App Group container.
 

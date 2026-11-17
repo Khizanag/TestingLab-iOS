@@ -10,14 +10,20 @@ public extension View {
     ///   - accent: The app's accent, for the Done button.
     ///   - erase: Deletes what the lab can't find on its own, such as an App Group store, before Erase Everything
     ///     removes the app's files and settings and quits.
+    ///   - isEnabled: Whether this host answers a request to open. An app that hosts the lab on each full-screen
+    ///     flow as well as its root turns the root's off while a flow covers it: only one sheet can open at a time,
+    ///     and one from below a cover never shows.
     ///   - sections: The app's own tools, shown between the build notes and the build info.
     func testingLab<Sections: View>(
         notes: [BuildNote] = [],
         accent: Color = .accentColor,
         erase: (@MainActor () -> Void)? = nil,
+        isEnabled: Bool = true,
         @ViewBuilder sections: @escaping () -> Sections
     ) -> some View {
-        modifier(TestingLabModifier(notes: notes, accent: accent, erase: erase, sections: sections))
+        modifier(
+            TestingLabModifier(notes: notes, accent: accent, erase: erase, isEnabled: isEnabled, sections: sections)
+        )
     }
 }
 
@@ -30,15 +36,17 @@ private struct TestingLabModifier<Sections: View>: ViewModifier {
     let notes: [BuildNote]
     let accent: Color
     let erase: (@MainActor () -> Void)?
+    let isEnabled: Bool
     let sections: () -> Sections
 
     func body(content: Content) -> some View {
         content
-            .task {
-                guard LaunchOpening.claim() else { return }
+            .task(id: isEnabled) {
+                guard isEnabled, LaunchOpening.claim() else { return }
                 isPresented = UserDefaults.standard.bool(forKey: "openTestingLab")
             }
             .onReceive(NotificationCenter.default.publisher(for: .openTestingLab)) { _ in
+                guard isEnabled else { return }
                 isPresented = true
             }
             .sheet(isPresented: $isPresented, onDismiss: runAfterClose) {
