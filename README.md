@@ -39,6 +39,8 @@ ContentView()
 | `@Environment(\.openTestingLab)` | Opens the lab from anywhere, such as a settings row |
 | `@Environment(\.closeTestingLab)` | Inside the app's sections: closes the lab, then runs an action so what it shows is visible |
 
+An app with full-screen covers or sheets can attach the lab to each one's root as well as the app's root: a sheet can't open over a cover from below it, so the topmost host is the one that shows. The launch argument opens it once, however many hosts there are.
+
 The lab always adds a **Build** section (version, bundle ID) and **Erase Everything and Quit**, which deletes the app's settings, Application Support, Caches, Documents, and temporary files, then quits. Pass `erase:` for anything else, such as a store in an App Group container.
 
 ## Develop

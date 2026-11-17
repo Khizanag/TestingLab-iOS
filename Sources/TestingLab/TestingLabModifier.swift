@@ -34,7 +34,10 @@ private struct TestingLabModifier<Sections: View>: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .task { isPresented = UserDefaults.standard.bool(forKey: "openTestingLab") }
+            .task {
+                guard LaunchOpening.claim() else { return }
+                isPresented = UserDefaults.standard.bool(forKey: "openTestingLab")
+            }
             .onReceive(NotificationCenter.default.publisher(for: .openTestingLab)) { _ in
                 isPresented = true
             }
@@ -51,6 +54,19 @@ private struct TestingLabModifier<Sections: View>: ViewModifier {
         let action = afterClose
         afterClose = nil
         action?()
+    }
+}
+
+// MARK: - Launch
+/// `-openTestingLab YES` opens the lab once per launch. An app that hosts the lab in more than one place, such as
+/// on each full-screen flow so it can open above them, would otherwise open it again with every host that appears.
+enum LaunchOpening {
+    private static var isClaimed = false
+
+    /// True for the first host that asks, false for every later one.
+    static func claim() -> Bool {
+        defer { isClaimed = true }
+        return !isClaimed
     }
 }
 #endif

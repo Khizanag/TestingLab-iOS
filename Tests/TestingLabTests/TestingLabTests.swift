@@ -31,6 +31,13 @@ struct TestingLabTests {
         }
     }
 
+    @Test("The launch argument is claimed by the first host only")
+    func launchOpeningIsClaimedOnce() {
+        // Whatever the first call returns, another host in this process may have claimed it already.
+        _ = LaunchOpening.claim()
+        #expect(!LaunchOpening.claim())
+    }
+
     @Test("Outside the lab, closing runs the action at once")
     func closeOutsideLabRunsAction() {
         let flag = Flag()
